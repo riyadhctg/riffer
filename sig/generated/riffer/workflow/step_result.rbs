@@ -1,20 +1,35 @@
 # Generated from lib/riffer/workflow/step_result.rb with RBS::Inline
 
+# Riffer::Workflow::StepResult represents the outcome of a single
+# Riffer::Workflow::Step execution.
+#
+# On success, +output+ holds the step's validated Hash output. On failure,
+# +error+ holds the raised exception (either a schema violation or an
+# exception raised from the step's +call+ method).
+#
+# See Riffer::Workflow::Result.
 class Riffer::Workflow::StepResult
+  # The identifier of the step that produced this result.
   attr_reader step: String
 
+  # The step's validated output, or +nil+ when the step failed.
   attr_reader output: Hash[Symbol, untyped]?
 
+  # The exception raised by the step, or +nil+ when the step succeeded.
   attr_reader error: StandardError?
 
   # --
   # : (step: String, ?output: Hash[Symbol, untyped]?, ?error: StandardError?) -> void
   def initialize: (step: String, ?output: Hash[Symbol, untyped]?, ?error: StandardError?) -> void
 
+  # Returns +true+ when the step succeeded.
+  #
   # --
   # : () -> bool
   def success?: () -> bool
 
+  # Returns +true+ when the step failed.
+  #
   # --
   # : () -> bool
   def failure?: () -> bool

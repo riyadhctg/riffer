@@ -1,6 +1,21 @@
 # Generated from lib/riffer/workflow/runner.rb with RBS::Inline
 
+# Riffer::Workflow::Runner executes a list of Riffer::Workflow::Step
+# classes in order.
+#
+# Validates each step's input before calling it, validates its output
+# before passing it to the next step, and stops at the first failure.
+# Used internally by Riffer::Workflow#run.
 class Riffer::Workflow::Runner
+  # Runs the given steps with the provided initial input.
+  #
+  # Returns a Riffer::Workflow::Result containing the per-step trace and
+  # the last successful step's output.
+  #
+  # [steps]   an Array of Riffer::Workflow::Step subclasses.
+  # [input]   the Hash passed as input to the first step.
+  # [context] the shared context Hash forwarded to every step.
+  #
   # --
   # : (Array[singleton(Riffer::Workflow::Step)], Hash[Symbol, untyped], context: Hash[Symbol, untyped]?) -> Riffer::Workflow::Result
   def call: (Array[singleton(Riffer::Workflow::Step)], Hash[Symbol, untyped], context: Hash[Symbol, untyped]?) -> Riffer::Workflow::Result
