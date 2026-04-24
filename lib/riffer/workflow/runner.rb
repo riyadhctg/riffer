@@ -69,5 +69,4 @@ class Riffer::Workflow::Runner
 
     value
   end
-
 end
