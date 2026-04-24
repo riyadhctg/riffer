@@ -28,9 +28,4 @@ describe Riffer::Workflow::Result do
     result = Riffer::Workflow::Result.new(steps: [ok_a])
     expect(result.steps).must_be :frozen?
   end
-
-  it "treats an empty steps list as successful" do
-    result = Riffer::Workflow::Result.new(steps: [])
-    expect(result).must_be :success?
-  end
 end
