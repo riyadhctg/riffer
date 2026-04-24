@@ -1,6 +1,6 @@
 # Overview
 
-Riffer is a Ruby framework for building AI-powered applications and agents. It provides a complete toolkit for integrating Large Language Models (LLMs) into your Ruby projects.
+Riffer is a Ruby framework for building AI-powered applications, agents, and workflows. It provides a complete toolkit for integrating Large Language Models (LLMs) into your Ruby projects.
 
 ## Core Concepts
 
@@ -36,6 +36,21 @@ end
 ```
 
 See [Tools](06_TOOLS.md) for details.
+
+### Workflow
+
+Workflows let you compose a fixed sequence of `Riffer::Workflow::Step` classes into a deterministic pipeline. They are useful when the sequence of work is known ahead of time and you want each step boundary to be explicit and validated.
+
+```ruby
+workflow = Riffer::Workflow.new(
+  steps: [NormalizeWeather, AssessConditions, RecommendPlan]
+)
+
+result = workflow.run(condition: "Rain", temperature_c: 21.0)
+result.output  # => {recommendation: "indoor", summary: "..."}
+```
+
+See [Workflows](14_WORKFLOWS.md) for details.
 
 ### Structured Output
 
@@ -134,3 +149,4 @@ Response
 - [Evals](11_EVALS.md) - Evaluating agent quality
 - [Guardrails](12_GUARDRAILS.md) - Input/output validation
 - [Skills](13_SKILLS.md) - Packaged agent capabilities
+- [Workflows](14_WORKFLOWS.md) - Deterministic multi-step pipelines
