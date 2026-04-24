@@ -26,6 +26,16 @@ module RunnerTestSteps
     end
   end
 
+  class EmitBar < Riffer::Workflow::Step
+    output do
+      required :bar, String
+    end
+
+    def call(context:, **kwargs)
+      {bar: "hello"}
+    end
+  end
+
   class DeclareBar < Riffer::Workflow::Step
     output do
       required :bar, String
@@ -101,6 +111,21 @@ describe Riffer::Workflow::Runner do
     expect(result.error).must_be_kind_of Riffer::ValidationError
     expect(result.steps.size).must_equal 1
     expect(RunnerTestSteps::NeverRuns.ran).must_equal false
+  end
+
+  it "fails when one step's output does not satisfy the next step's input" do
+    result = runner.call(
+      [RunnerTestSteps::EmitBar, RunnerTestSteps::RequireFoo],
+      {},
+      context: nil
+    )
+
+    expect(result).must_be :failure?
+    expect(result.failed_step).must_equal "runner_test_steps/require_foo"
+    expect(result.error).must_be_kind_of Riffer::ValidationError
+    expect(result.error.message).must_equal "foo is required"
+    expect(result.output).must_equal(bar: "hello")
+    expect(result.steps.map(&:success?)).must_equal [true, false]
   end
 
   it "captures output validation failures" do
