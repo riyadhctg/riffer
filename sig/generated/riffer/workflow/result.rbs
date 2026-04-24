@@ -1,0 +1,27 @@
+# Generated from lib/riffer/workflow/result.rb with RBS::Inline
+
+class Riffer::Workflow::Result
+  attr_reader output: Hash[Symbol, untyped]?
+
+  attr_reader steps: Array[Riffer::Workflow::StepResult]
+
+  # --
+  # : (?output: Hash[Symbol, untyped]?, ?steps: Array[Riffer::Workflow::StepResult]) -> void
+  def initialize: (?output: Hash[Symbol, untyped]?, ?steps: Array[Riffer::Workflow::StepResult]) -> void
+
+  # --
+  # : () -> bool
+  def success?: () -> bool
+
+  # --
+  # : () -> bool
+  def failure?: () -> bool
+
+  # --
+  # : () -> StandardError?
+  def error: () -> StandardError?
+
+  # --
+  # : () -> String?
+  def failed_step: () -> String?
+end

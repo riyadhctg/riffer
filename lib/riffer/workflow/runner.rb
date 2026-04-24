@@ -6,7 +6,7 @@ class Riffer::Workflow::Runner
   #: (Array[singleton(Riffer::Workflow::Step)], Hash[Symbol, untyped], context: Hash[Symbol, untyped]?) -> Riffer::Workflow::Result
   def call(steps, input, context:)
     step_results = [] #: Array[Riffer::Workflow::StepResult]
-    current_data = normalize_hash(input)
+    current_data = ensure_hash(input)
     last_output = nil #: Hash[Symbol, untyped]?
 
     steps.each do |step_class|
@@ -56,7 +56,7 @@ class Riffer::Workflow::Runner
   #--
   #: (singleton(Riffer::Workflow::Step), untyped) -> Hash[Symbol, untyped]
   def validate_output(step_class, data)
-    hash_output = normalize_hash(data)
+    hash_output = ensure_hash(data)
     return hash_output unless step_class.output
 
     step_class.output.validate(hash_output)
@@ -64,7 +64,7 @@ class Riffer::Workflow::Runner
 
   #--
   #: (untyped) -> Hash[Symbol, untyped]
-  def normalize_hash(value)
+  def ensure_hash(value)
     raise Riffer::ValidationError, "workflow data must be a Hash" unless value.is_a?(Hash)
 
     value

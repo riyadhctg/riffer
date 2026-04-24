@@ -1,0 +1,25 @@
+# Generated from lib/riffer/workflow.rb with RBS::Inline
+
+class Riffer::Workflow
+  attr_reader steps: Array[singleton(Riffer::Workflow::Step)]
+
+  attr_reader context: Hash[Symbol, untyped]?
+
+  # --
+  # : (steps: Array[singleton(Riffer::Workflow::Step)], ?context: Hash[Symbol, untyped]?) -> void
+  def initialize: (steps: Array[singleton(Riffer::Workflow::Step)], ?context: Hash[Symbol, untyped]?) -> void
+
+  # --
+  # : (?context: Hash[Symbol, untyped]?, **untyped) -> Riffer::Workflow::Result
+  def run: (?context: Hash[Symbol, untyped]?, **untyped) -> Riffer::Workflow::Result
+
+  private
+
+  # --
+  # : (Array[untyped]) -> void
+  def validate_steps!: (Array[untyped]) -> void
+
+  # --
+  # : (Hash[Symbol, untyped]?) -> void
+  def validate_context!: (Hash[Symbol, untyped]?) -> void
+end

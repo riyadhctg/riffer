@@ -1,0 +1,21 @@
+# Generated from lib/riffer/workflow/step.rb with RBS::Inline
+
+class Riffer::Workflow::Step
+  extend Riffer::Helpers::ClassNameConverter
+
+  # --
+  # : (?String?) -> String
+  def self.identifier: (?String?) -> String
+
+  # --
+  # : (?Riffer::Params?) ?{ () -> void } -> Riffer::Params?
+  def self.input: (?Riffer::Params?) ?{ () -> void } -> Riffer::Params?
+
+  # --
+  # : (?Riffer::Params?) ?{ () -> void } -> Riffer::Params?
+  def self.output: (?Riffer::Params?) ?{ () -> void } -> Riffer::Params?
+
+  # --
+  # : (context: Hash[Symbol, untyped]?, **untyped) -> Hash[Symbol, untyped]
+  def call: (context: Hash[Symbol, untyped]?, **untyped) -> Hash[Symbol, untyped]
+end

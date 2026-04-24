@@ -1,0 +1,25 @@
+# Generated from lib/riffer/workflow/runner.rb with RBS::Inline
+
+class Riffer::Workflow::Runner
+  # --
+  # : (Array[singleton(Riffer::Workflow::Step)], Hash[Symbol, untyped], context: Hash[Symbol, untyped]?) -> Riffer::Workflow::Result
+  def call: (Array[singleton(Riffer::Workflow::Step)], Hash[Symbol, untyped], context: Hash[Symbol, untyped]?) -> Riffer::Workflow::Result
+
+  private
+
+  # --
+  # : (singleton(Riffer::Workflow::Step), Hash[Symbol, untyped], context: Hash[Symbol, untyped]?) -> Riffer::Workflow::StepResult
+  def execute_step: (singleton(Riffer::Workflow::Step), Hash[Symbol, untyped], context: Hash[Symbol, untyped]?) -> Riffer::Workflow::StepResult
+
+  # --
+  # : (singleton(Riffer::Workflow::Step), Hash[Symbol, untyped]) -> Hash[Symbol, untyped]
+  def validate_input: (singleton(Riffer::Workflow::Step), Hash[Symbol, untyped]) -> Hash[Symbol, untyped]
+
+  # --
+  # : (singleton(Riffer::Workflow::Step), untyped) -> Hash[Symbol, untyped]
+  def validate_output: (singleton(Riffer::Workflow::Step), untyped) -> Hash[Symbol, untyped]
+
+  # --
+  # : (untyped) -> Hash[Symbol, untyped]
+  def ensure_hash: (untyped) -> Hash[Symbol, untyped]
+end
