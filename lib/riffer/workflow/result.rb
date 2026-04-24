@@ -1,14 +1,28 @@
 # frozen_string_literal: true
 # rbs_inline: enabled
 
-# Represents the outcome of a workflow run.
+# Riffer::Workflow::Result represents the outcome of a Riffer::Workflow run.
 #
-# Provides access to the final output, per-step results, and overall
-# success or failure.
+# Exposes the final output, the per-step trace, and convenience accessors
+# for the first failed step's identifier and error. Returned from
+# Riffer::Workflow#run; runtime step failures are reported here rather
+# than raised.
+#
+# See Riffer::Workflow and Riffer::Workflow::StepResult.
+#
+#   result = workflow.run(condition: "Rain", temperature_c: 21.0)
+#
+#   if result.success?
+#     deliver(result.output)
+#   else
+#     log("Workflow failed at #{result.failed_step}: #{result.error.message}")
+#   end
 #
 class Riffer::Workflow::Result
+  # The last successful step's validated output, or +nil+ if no step succeeded.
   attr_reader :output #: Hash[Symbol, untyped]?
 
+  # The per-step trace, in execution order.
   attr_reader :steps #: Array[Riffer::Workflow::StepResult]
 
   #--
@@ -18,7 +32,7 @@ class Riffer::Workflow::Result
     @steps = steps.dup.freeze
   end
 
-  # Returns true when every executed step succeeded.
+  # Returns +true+ when every step succeeded.
   #
   #--
   #: () -> bool
@@ -26,7 +40,7 @@ class Riffer::Workflow::Result
     @steps.all?(&:success?)
   end
 
-  # Returns true when any executed step failed.
+  # Returns +true+ when any step failed.
   #
   #--
   #: () -> bool
@@ -34,7 +48,8 @@ class Riffer::Workflow::Result
     !success?
   end
 
-  # Returns the error from the failed step, if any.
+  # Returns the exception from the first failed step, or +nil+ when all
+  # steps succeeded.
   #
   #--
   #: () -> StandardError?
@@ -43,7 +58,8 @@ class Riffer::Workflow::Result
     failed&.error
   end
 
-  # Returns the identifier of the failed step, if any.
+  # Returns the identifier of the first failed step, or +nil+ when all
+  # steps succeeded.
   #
   #--
   #: () -> String?

@@ -1,16 +1,23 @@
 # frozen_string_literal: true
 # rbs_inline: enabled
 
-# Represents the outcome of a single workflow step.
+# Riffer::Workflow::StepResult represents the outcome of a single
+# Riffer::Workflow::Step execution.
 #
-# On success, +output+ contains the step's validated Hash output.
-# On failure, +error+ contains the exception raised for that step.
+# On success, +output+ holds the step's validated Hash output. On failure,
+# +error+ holds the raised exception (either a schema violation or an
+# exception raised from the step's +call+ method).
+#
+# See Riffer::Workflow::Result.
 #
 class Riffer::Workflow::StepResult
+  # The identifier of the step that produced this result.
   attr_reader :step #: String
 
+  # The step's validated output, or +nil+ when the step failed.
   attr_reader :output #: Hash[Symbol, untyped]?
 
+  # The exception raised by the step, or +nil+ when the step succeeded.
   attr_reader :error #: StandardError?
 
   #--
@@ -21,13 +28,13 @@ class Riffer::Workflow::StepResult
     @error = error
   end
 
-  # Returns true when the step succeeded.
+  # Returns +true+ when the step succeeded.
   #
   #--
   #: () -> bool
   def success? = @error.nil?
 
-  # Returns true when the step failed.
+  # Returns +true+ when the step failed.
   #
   #--
   #: () -> bool

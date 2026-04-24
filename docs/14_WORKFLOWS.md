@@ -5,6 +5,7 @@ Workflows let you compose a fixed sequence of `Riffer::Workflow::Step` classes i
 ## Example Usage of User-Facing API
 
 This example takes a small weather input and turns it into a simple plan recommendation.
+For convenience, the same example is available as `examples/workflows/weather_recommendation.rb` and can be run with `bundle exec ruby examples/workflows/weather_recommendation.rb`.
 
 ```text
 weather input

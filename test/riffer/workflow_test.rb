@@ -3,6 +3,12 @@
 require "test_helper"
 
 module WorkflowTestSteps
+  class SummarizerAgent < Riffer::Agent
+    identifier "workflow-test-summarizer"
+    model "mock/riffer-1"
+    instructions "You are a concise summarizer."
+  end
+
   class Increment < Riffer::Workflow::Step
     input do
       required :n, Integer
@@ -57,6 +63,21 @@ module WorkflowTestSteps
     def call(context:, name:)
       response = GreetTool.new.call_with_validation(context: context, name: name)
       {greeting: response.content}
+    end
+  end
+
+  class Summarize < Riffer::Workflow::Step
+    input do
+      required :text, String
+    end
+
+    output do
+      required :summary, String
+    end
+
+    def call(context:, text:)
+      response = SummarizerAgent.generate("Summarize:\n\n#{text}", context: context)
+      {summary: response.content}
     end
   end
 end
@@ -132,6 +153,14 @@ describe Riffer::Workflow do
 
       expect(result).must_be :success?
       expect(result.output).must_equal(greeting: "Hello, Ada!")
+    end
+
+    it "integrates with Riffer::Agent inside a step" do
+      workflow = Riffer::Workflow.new(steps: [WorkflowTestSteps::Summarize])
+      result = workflow.run(text: "Summarize this text")
+
+      expect(result).must_be :success?
+      expect(result.output).must_equal(summary: "Mock response")
     end
   end
 end

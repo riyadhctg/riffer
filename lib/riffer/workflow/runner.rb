@@ -1,14 +1,22 @@
 # frozen_string_literal: true
 # rbs_inline: enabled
 
-# Executes workflow steps in order and validates each handoff.
+# Riffer::Workflow::Runner executes a list of Riffer::Workflow::Step
+# classes in order.
 #
-# This is the internal engine used by Riffer::Workflow.
+# Validates each step's input before calling it, validates its output
+# before passing it to the next step, and stops at the first failure.
+# Used internally by Riffer::Workflow#run.
 #
 class Riffer::Workflow::Runner
-  # Runs the given steps with the provided input.
+  # Runs the given steps with the provided initial input.
   #
-  # Returns a Result containing overall workflow status and per-step outcomes.
+  # Returns a Riffer::Workflow::Result containing the per-step trace and
+  # the last successful step's output.
+  #
+  # [steps]   an Array of Riffer::Workflow::Step subclasses.
+  # [input]   the Hash passed as input to the first step.
+  # [context] the shared context Hash forwarded to every step.
   #
   #--
   #: (Array[singleton(Riffer::Workflow::Step)], Hash[Symbol, untyped], context: Hash[Symbol, untyped]?) -> Riffer::Workflow::Result

@@ -1,20 +1,40 @@
 # frozen_string_literal: true
 # rbs_inline: enabled
 
-# Riffer::Workflow composes step classes into a deterministic pipeline.
+# Riffer::Workflow composes Riffer::Workflow::Step classes into a
+# deterministic, sequential pipeline.
 #
-# Each step receives validated input, returns a Hash, and passes validated
-# output to the next step. Execution stops on the first failed step.
+# Each step receives validated input, returns a Hash, and passes its
+# validated output to the next step. The final Riffer::Workflow::Result
+# reports overall success or failure and per-step outcomes.
+#
+# An optional +context+ Hash is forwarded to every step and is intended
+# for cross-cutting data (e.g. a user id, tenant id, or request id) that
+# should not flow through each step's declared input and output.
+#
+# See Riffer::Workflow::Step and Riffer::Workflow::Result.
+#
+#   workflow = Riffer::Workflow.new(
+#     steps: [NormalizeWeather, AssessConditions, RecommendPlan]
+#   )
+#
+#   result = workflow.run(condition: "Rain", temperature_c: 21.0)
+#   result.success?     # => true
+#   result.output       # => {recommendation: "indoor", summary: "..."}
+#   result.failed_step  # => nil
 #
 class Riffer::Workflow
   attr_reader :steps #: Array[singleton(Riffer::Workflow::Step)]
 
   attr_reader :context #: Hash[Symbol, untyped]?
 
-  # Creates a workflow from an ordered list of step classes.
+  # Creates a new workflow.
   #
-  # Raises Riffer::ArgumentError if steps is empty, contains invalid classes,
-  # or context is not a Hash.
+  # [steps]   a non-empty Array of Riffer::Workflow::Step subclasses.
+  # [context] an optional Hash of shared data available to every step.
+  #
+  # Raises Riffer::ArgumentError if +steps+ is empty, contains a non-step
+  # class, or if +context+ is not a Hash.
   #
   #--
   #: (steps: Array[singleton(Riffer::Workflow::Step)], ?context: Hash[Symbol, untyped]?) -> void
@@ -26,9 +46,14 @@ class Riffer::Workflow
     @context = context
   end
 
-  # Runs the workflow with the given input.
+  # Runs the workflow with the given input and returns a Riffer::Workflow::Result.
   #
-  # Returns a Result describing success/failure and per-step outcomes.
+  # Keyword arguments are passed as the first step's input. An optional
+  # +context+ overrides the context set at construction time.
+  #
+  # Does not raise from runtime step failures; inspect the returned Result
+  # via +success?+, +failure?+, +error+, and +failed_step+. Raises
+  # Riffer::ArgumentError if +context+ is not a Hash.
   #
   #--
   #: (?context: Hash[Symbol, untyped]?, **untyped) -> Riffer::Workflow::Result
