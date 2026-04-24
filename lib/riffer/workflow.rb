@@ -1,11 +1,21 @@
 # frozen_string_literal: true
 # rbs_inline: enabled
 
+# Riffer::Workflow composes step classes into a deterministic pipeline.
+#
+# Each step receives validated input, returns a Hash, and passes validated
+# output to the next step. Execution stops on the first failed step.
+#
 class Riffer::Workflow
   attr_reader :steps #: Array[singleton(Riffer::Workflow::Step)]
 
   attr_reader :context #: Hash[Symbol, untyped]?
 
+  # Creates a workflow from an ordered list of step classes.
+  #
+  # Raises Riffer::ArgumentError if steps is empty, contains invalid classes,
+  # or context is not a Hash.
+  #
   #--
   #: (steps: Array[singleton(Riffer::Workflow::Step)], ?context: Hash[Symbol, untyped]?) -> void
   def initialize(steps:, context: nil)
@@ -16,6 +26,10 @@ class Riffer::Workflow
     @context = context
   end
 
+  # Runs the workflow with the given input.
+  #
+  # Returns a Result describing success/failure and per-step outcomes.
+  #
   #--
   #: (?context: Hash[Symbol, untyped]?, **untyped) -> Riffer::Workflow::Result
   def run(context: @context, **input)

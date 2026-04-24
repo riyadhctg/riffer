@@ -1,7 +1,15 @@
 # frozen_string_literal: true
 # rbs_inline: enabled
 
+# Executes workflow steps in order and validates each handoff.
+#
+# This is the internal engine used by Riffer::Workflow.
+#
 class Riffer::Workflow::Runner
+  # Runs the given steps with the provided input.
+  #
+  # Returns a Result containing overall workflow status and per-step outcomes.
+  #
   #--
   #: (Array[singleton(Riffer::Workflow::Step)], Hash[Symbol, untyped], context: Hash[Symbol, untyped]?) -> Riffer::Workflow::Result
   def call(steps, input, context:)

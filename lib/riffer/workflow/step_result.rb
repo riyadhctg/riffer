@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 # rbs_inline: enabled
 
+# Represents the outcome of a single workflow step.
+#
+# On success, +output+ contains the step's validated Hash output.
+# On failure, +error+ contains the exception raised for that step.
+#
 class Riffer::Workflow::StepResult
   attr_reader :step #: String
 
@@ -16,10 +21,14 @@ class Riffer::Workflow::StepResult
     @error = error
   end
 
+  # Returns true when the step succeeded.
+  #
   #--
   #: () -> bool
   def success? = @error.nil?
 
+  # Returns true when the step failed.
+  #
   #--
   #: () -> bool
   def failure?

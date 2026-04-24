@@ -1,9 +1,16 @@
 # frozen_string_literal: true
 # rbs_inline: enabled
 
+# Base class for workflow steps.
+#
+# Steps declare input and output contracts with the Params DSL and implement
+# +call+ to perform one stage of a workflow.
+#
 class Riffer::Workflow::Step
   extend Riffer::Helpers::ClassNameConverter
 
+  # Gets or sets the step identifier.
+  #
   #--
   #: (?String?) -> String
   def self.identifier(value = nil)
@@ -20,6 +27,8 @@ class Riffer::Workflow::Step
     end
   end
 
+  # Defines the input schema for this step.
+  #
   #--
   #: (?Riffer::Params?) ?{ () -> void } -> Riffer::Params?
   def self.input(params = nil, &block)
@@ -34,6 +43,8 @@ class Riffer::Workflow::Step
     end
   end
 
+  # Defines the output schema for this step.
+  #
   #--
   #: (?Riffer::Params?) ?{ () -> void } -> Riffer::Params?
   def self.output(params = nil, &block)
@@ -48,6 +59,10 @@ class Riffer::Workflow::Step
     end
   end
 
+  # Executes the step with validated input.
+  #
+  # Subclasses must override this method and return a Hash.
+  #
   #--
   #: (context: Hash[Symbol, untyped]?, **untyped) -> Hash[Symbol, untyped]
   def call(context:, **kwargs)
